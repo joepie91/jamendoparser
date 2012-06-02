@@ -1,8 +1,8 @@
-import urllib, gzip
+import urllib, gzip, sys
 from lxml import etree
 
 xml_url = "http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
-xml_path = "dump.xml.gz"
+xml_file = "dump.xml.gz"
 
 def update_progress(count, blocksize, totalsize):
 	percent = int(count * blocksize * 100 / totalsize)
