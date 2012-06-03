@@ -104,8 +104,6 @@ for event, element in iterparse(xml, tag="artist"):
 			trackgenre = get_attribute(track, 'id3genre')
 			tracklicense = get_attribute(track, 'license')
 			
-			print "        [%3d] %s (ID: %s)" % (int(tracknumber), trackname, trackid)
-			
 			alltags = []
 			taglist = track.find('Tags')
 			
@@ -115,10 +113,5 @@ for event, element in iterparse(xml, tag="artist"):
 					tagid = get_attribute(tag, 'idstr')
 					tagweight = get_attribute(tag, 'weight')
 					alltags.append("%s (weight %s)" % (tagid, tagweight))
-				
-				print "                  %s" % '   '.join(alltags)
-			else:
-				print "                  No tags."
-		
-	print ""
+	
 	element.clear()
