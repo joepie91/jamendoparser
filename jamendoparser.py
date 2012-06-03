@@ -20,6 +20,9 @@ def get_attribute(element, tagname):
 		else:
 			return val.text
 
+database = sqlite3.connect(options['database'])
+cursor = database.cursor()
+
 #print "Retrieving Jamendo database..."
 #urllib.urlretrieve(xml_url, xml_file, reporthook=update_progress)
 #print ""
