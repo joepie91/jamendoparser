@@ -5,7 +5,7 @@ xml_url = "http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
 
 def update_progress(count, blocksize, totalsize):
 	percent = int(count * blocksize * 100 / totalsize)
-	sys.stdout.write("\r%2d%%" % percent)
+	sys.stdout.write("\rRetrieving Jamendo database... %2d%%" % percent)
 	sys.stdout.flush()
 	
 def get_attribute(element, tagname):
@@ -36,7 +36,6 @@ options = vars(args)
 xml_file = options['xml_path']
 
 if options['no_download'] == False:
-	print "Retrieving Jamendo database..."
 	urllib.urlretrieve(xml_url, xml_file, reporthook=update_progress)
 	print ""
 
@@ -119,11 +118,13 @@ for event, element in iterparse(xml, tag="artist"):
 					tagweight = get_attribute(tag, 'weight')
 					cursor.execute("INSERT INTO tags VALUES (?, ?, ?)", (trackid, tagid, tagweight))
 	
-	print "Inserted %s into database" % (name,)
+	sys.stdout.write("\rInserting artists... %6d done" % (total + 1))
+	sys.stdout.flush()
 	
 	total += 1
 	element.clear()
 
+print ""
 print "Parsed and inserted a total of %d artists." % total
 database.commit()
 print "Changes committed to database."
