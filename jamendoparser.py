@@ -43,6 +43,30 @@ if options['no_download'] == False:
 database = sqlite3.connect(options['database'])
 cursor = database.cursor()
 
+try:
+	# Try to create artists table
+	cursor.execute("CREATE TABLE artists (`id`, `name`, `url`, `image`, `mbgid`, `location`)")
+except sqlite3.OperationalError:
+	pass
+	
+try:
+	# Try to create albums table
+	cursor.execute("CREATE TABLE artists (`id`, `artist_id`, `name`, `url`, `releasedate`, `filename`, `mbgid`, `license_artwork`)")
+except sqlite3.OperationalError:
+	pass
+	
+try:
+	# Try to create tracks table
+	cursor.execute("CREATE TABLE tracks (`id`, `artist_id`, `album_id`, `name`, `filename`, `mbgid`, `tracknumber`, `genre`, `license`)")
+except sqlite3.OperationalError:
+	pass
+	
+try:
+	# Try to create tags table
+	cursor.execute("CREATE TABLE tags (`track_id`, `name`, `weight`)")
+except sqlite3.OperationalError:
+	pass
+
 xml = gzip.open(xml_file)
 
 for event, element in iterparse(xml, tag="artist"):
