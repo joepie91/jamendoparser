@@ -105,7 +105,6 @@ for event, element in iterparse(xml, tag="artist"):
 			
 			cursor.execute("INSERT INTO tracks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (trackid, artistid, albumid, trackname, trackfilename, trackmbgid, tracknumber, trackgenre, tracklicense))
 			
-			alltags = []
 			taglist = track.find('Tags')
 			
 			if taglist is not None:
@@ -113,6 +112,6 @@ for event, element in iterparse(xml, tag="artist"):
 					# idstr, weight
 					tagid = get_attribute(tag, 'idstr')
 					tagweight = get_attribute(tag, 'weight')
-					alltags.append("%s (weight %s)" % (tagid, tagweight))
+					cursor.execute("INSERT INTO tags VALUES (?, ?, ?)", (trackid, tagid, tagweight))
 	
 	element.clear()
