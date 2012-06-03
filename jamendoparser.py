@@ -1,8 +1,7 @@
-import urllib, gzip, sys
+import urllib, gzip, sys, argparse
 from lxml.etree import iterparse
 
 xml_url = "http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
-xml_file = "dump.xml.gz"
 
 def update_progress(count, blocksize, totalsize):
 	percent = int(count * blocksize * 100 / totalsize)
@@ -22,6 +21,20 @@ def get_attribute(element, tagname):
 
 database = sqlite3.connect(options['database'])
 cursor = database.cursor()
+
+parser = argparse.ArgumentParser(description='Downloads and parses the Jamendo XML dump, and creates an SQLite database with all artist, album, track, and tag data.')
+
+parser.add_argument('-D', dest='no_download', action='store_true',
+                   help='don\'t download the XML dump and use an existing XML dump instead')
+                   
+parser.add_argument('-d', dest='database', action='store', default='jamendo.db',
+                   help='path of the database that should be used to store the data (will be created if it does not exist yet)')
+                   
+parser.add_argument('-x', dest='xml_path', action='store', default='jamendo.xml.gz',
+                   help='path to the Jamendo XML dump (this is the file that will be created when a new dump is downloaded)')
+
+args = parser.parse_args()
+options = vars(args)
 
 #print "Retrieving Jamendo database..."
 #urllib.urlretrieve(xml_url, xml_file, reporthook=update_progress)
