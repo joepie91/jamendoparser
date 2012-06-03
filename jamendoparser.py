@@ -83,6 +83,7 @@ for event, element in iterparse(xml, tag="artist"):
 	
 	for album in element.find('Albums'):
 		# id, name, url, releasedate, filename, mbgid, license_artwork, Tracks
+		albumid = get_attribute(album, 'id')
 		albumname = get_attribute(album, 'name')
 		albumurl = get_attribute(album, 'url')
 		albumrelease = get_attribute(album, 'releasedate')
