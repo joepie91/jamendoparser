@@ -79,7 +79,6 @@ for event, element in iterparse(xml, tag="artist"):
 	location = get_attribute(element, 'location')
 	
 	cursor.execute("INSERT INTO artists VALUES (?, ?, ?, ?, ?, ?)", (artistid, name, url, image, mbgid, location))
-	print "[%s] %s from %s (image: %s)" % (artistid, name, location, image)
 	
 	for album in element.find('Albums'):
 		# id, name, url, releasedate, filename, mbgid, license_artwork, Tracks
@@ -113,5 +112,7 @@ for event, element in iterparse(xml, tag="artist"):
 					tagid = get_attribute(tag, 'idstr')
 					tagweight = get_attribute(tag, 'weight')
 					cursor.execute("INSERT INTO tags VALUES (?, ?, ?)", (trackid, tagid, tagweight))
+	
+	print "Inserted %s into database" % (name,)
 	
 	element.clear()
