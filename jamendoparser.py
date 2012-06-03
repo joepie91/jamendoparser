@@ -68,6 +68,7 @@ except sqlite3.OperationalError:
 	pass
 
 xml = gzip.open(xml_file)
+total = 0
 
 for event, element in iterparse(xml, tag="artist"):
 	# id, name, url, image, mbgid, location, Albums
@@ -120,6 +121,9 @@ for event, element in iterparse(xml, tag="artist"):
 	
 	print "Inserted %s into database" % (name,)
 	
+	total += 1
 	element.clear()
 
+print "Parsed and inserted a total of %d artists." % total
 database.commit()
+print "Changes committed to database."
