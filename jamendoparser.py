@@ -92,7 +92,6 @@ for event, element in iterparse(xml, tag="artist"):
 		albumartworklicense = get_attribute(album, 'license_artwork')
 		
 		cursor.execute("INSERT INTO albums VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (albumid, albumname, albumurl, albumrelease, albumfilename, albummbgid, albumartworklicense))
-		print "    -> Album: %s (%s) at %s" % (albumname, albumrelease, albumurl)
 		
 		for track in album.find('Tracks'):
 			# id, name, filename, mbgid, numalbum, id3genre, license, Tags
