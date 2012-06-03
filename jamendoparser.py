@@ -73,6 +73,7 @@ for event, element in iterparse(xml, tag="artist"):
 	# id, name, url, image, mbgid, location, Albums
 	artistid = get_attribute(element, 'id')
 	name = get_attribute(element, 'name')
+	url = get_attribute(element, 'url')
 	image = get_attribute(element, 'image')
 	mbgid = get_attribute(element, 'mbgid')
 	location = get_attribute(element, 'location')
