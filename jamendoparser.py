@@ -77,6 +77,7 @@ for event, element in iterparse(xml, tag="artist"):
 	mbgid = get_attribute(element, 'mbgid')
 	location = get_attribute(element, 'location')
 	
+	cursor.execute("INSERT INTO artists VALUES (?, ?, ?, ?, ?, ?)", (artistid, name, url, image, mbgid, location))
 	print "[%s] %s from %s (image: %s)" % (artistid, name, location, image)
 	
 	for album in element.find('Albums'):
