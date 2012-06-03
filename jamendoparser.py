@@ -51,7 +51,7 @@ except sqlite3.OperationalError:
 	
 try:
 	# Try to create albums table
-	cursor.execute("CREATE TABLE artists (`id`, `artist_id`, `name`, `url`, `releasedate`, `filename`, `mbgid`, `license_artwork`)")
+	cursor.execute("CREATE TABLE albums (`id`, `artist_id`, `name`, `url`, `releasedate`, `filename`, `mbgid`, `license_artwork`)")
 except sqlite3.OperationalError:
 	pass
 	
