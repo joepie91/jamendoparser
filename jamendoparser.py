@@ -103,6 +103,8 @@ for event, element in iterparse(xml, tag="artist"):
 			trackgenre = get_attribute(track, 'id3genre')
 			tracklicense = get_attribute(track, 'license')
 			
+			cursor.execute("INSERT INTO tracks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (trackid, artistid, albumid, trackname, trackfilename, trackmbgid, tracknumber, trackgenre, tracklicense))
+			
 			alltags = []
 			taglist = track.find('Tags')
 			
