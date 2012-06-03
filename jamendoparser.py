@@ -91,7 +91,7 @@ for event, element in iterparse(xml, tag="artist"):
 		albummbgid = get_attribute(album, 'mbgid')
 		albumartworklicense = get_attribute(album, 'license_artwork')
 		
-		cursor.execute("INSERT INTO albums VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (albumid, albumname, albumurl, albumrelease, albumfilename, albummbgid, albumartworklicense))
+		cursor.execute("INSERT INTO albums VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (albumid, artistid, albumname, albumurl, albumrelease, albumfilename, albummbgid, albumartworklicense))
 		
 		for track in album.find('Tracks'):
 			# id, name, filename, mbgid, numalbum, id3genre, license, Tags
