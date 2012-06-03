@@ -36,6 +36,8 @@ parser.add_argument('-x', dest='xml_path', action='store', default='jamendo.xml.
 args = parser.parse_args()
 options = vars(args)
 
+xml_file = options['xml_path']
+
 if options['no_download'] == False:
 	print "Retrieving Jamendo database..."
 	urllib.urlretrieve(xml_url, xml_file, reporthook=update_progress)
