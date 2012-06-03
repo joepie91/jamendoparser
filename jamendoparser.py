@@ -1,4 +1,4 @@
-import urllib, gzip, sys, argparse
+import urllib, gzip, sys, argparse, sqlite3
 from lxml.etree import iterparse
 
 xml_url = "http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
@@ -18,9 +18,6 @@ def get_attribute(element, tagname):
 			return ""
 		else:
 			return val.text
-
-database = sqlite3.connect(options['database'])
-cursor = database.cursor()
 
 parser = argparse.ArgumentParser(description='Downloads and parses the Jamendo XML dump, and creates an SQLite database with all artist, album, track, and tag data.')
 
@@ -42,6 +39,9 @@ if options['no_download'] == False:
 	print "Retrieving Jamendo database..."
 	urllib.urlretrieve(xml_url, xml_file, reporthook=update_progress)
 	print ""
+
+database = sqlite3.connect(options['database'])
+cursor = database.cursor()
 
 xml = gzip.open(xml_file)
 
