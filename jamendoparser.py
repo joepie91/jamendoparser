@@ -1,4 +1,4 @@
-import urllib, gzip, sys, argparse, sqlite3
+import urllib, gzip, sys, argparse, sqlite3, datetime, time
 from lxml.etree import iterparse
 
 xml_url = "http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
@@ -76,16 +76,21 @@ for event, element in iterparse(xml, tag="artist"):
 	url = get_attribute(element, 'url')
 	image = get_attribute(element, 'image')
 	mbgid = get_attribute(element, 'mbgid')
-	location = get_attribute(element, 'location')
 	
-	cursor.execute("INSERT INTO artists VALUES (?, ?, ?, ?, ?, ?)", (artistid, name, url, image, mbgid, location))
+	location_element = element.find('location')
+	try:
+		country = get_attribute(location_element, 'country')
+	except AttributeError:
+		country = ""
+	
+	cursor.execute("INSERT INTO artists VALUES (?, ?, ?, ?, ?, ?)", (artistid, name, url, image, mbgid, country))
 	
 	for album in element.find('Albums'):
 		# id, name, url, releasedate, filename, mbgid, license_artwork, Tracks
 		albumid = get_attribute(album, 'id')
 		albumname = get_attribute(album, 'name')
 		albumurl = get_attribute(album, 'url')
-		albumrelease = get_attribute(album, 'releasedate')
+		albumrelease = int(time.mktime(datetime.datetime.strptime(get_attribute(album, 'releasedate').split('+')[0], '%Y-%m-%dT%H:%M:%S').timetuple()))
 		albumfilename = get_attribute(album, 'filename')
 		albummbgid = get_attribute(album, 'mbgid')
 		albumartworklicense = get_attribute(album, 'license_artwork')
@@ -116,3 +121,5 @@ for event, element in iterparse(xml, tag="artist"):
 	print "Inserted %s into database" % (name,)
 	
 	element.clear()
+
+database.commit()
