@@ -5,8 +5,9 @@ xml_url = "http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
 
 def update_progress(count, blocksize, totalsize):
 	percent = int(count * blocksize * 100 / totalsize)
-	sys.stdout.write("\rRetrieving Jamendo database... %2d%%" % percent)
-	sys.stdout.flush()
+	if options['no_output'] == False:
+		sys.stdout.write("\rRetrieving Jamendo database... %2d%%" % percent)
+		sys.stdout.flush()
 	
 def get_attribute(element, tagname):
 	val = element.find(tagname)
@@ -24,6 +25,9 @@ parser = argparse.ArgumentParser(description='Downloads and parses the Jamendo X
 parser.add_argument('-D', dest='no_download', action='store_true',
                    help='don\'t download the XML dump and use an existing XML dump instead')
                    
+parser.add_argument('-N', dest='no_output', action='store_true',
+                   help='prevents the application from outputting anything')
+                   
 parser.add_argument('-d', dest='database', action='store', default='jamendo.db',
                    help='path of the database that should be used to store the data (will be created if it does not exist yet)')
                    
@@ -37,7 +41,8 @@ xml_file = options['xml_path']
 
 if options['no_download'] == False:
 	urllib.urlretrieve(xml_url, xml_file, reporthook=update_progress)
-	print ""
+	if options['no_output'] == False:
+		print ""
 
 database = sqlite3.connect(options['database'])
 cursor = database.cursor()
@@ -118,13 +123,18 @@ for event, element in iterparse(xml, tag="artist"):
 					tagweight = get_attribute(tag, 'weight')
 					cursor.execute("INSERT INTO tags VALUES (?, ?, ?)", (trackid, tagid, tagweight))
 	
-	sys.stdout.write("\rInserting artists... %6d done" % (total + 1))
-	sys.stdout.flush()
+	if options['no_output'] == False:
+		sys.stdout.write("\rInserting artists... %6d done" % (total + 1))
+		sys.stdout.flush()
 	
 	total += 1
 	element.clear()
 
-print ""
-print "Parsed and inserted a total of %d artists." % total
+if options['no_output'] == False:
+	print ""
+	print "Parsed and inserted a total of %d artists." % total
+	
 database.commit()
-print "Changes committed to database."
+
+if options['no_output'] == False:
+	print "Changes committed to database."
